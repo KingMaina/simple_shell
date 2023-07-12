@@ -1,0 +1,4 @@
+*~
+*.swp
+.#execute_command.c
+vgcore*
