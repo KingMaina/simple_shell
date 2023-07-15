@@ -75,3 +75,11 @@ char *_strncpy(char *dest, char *src, int n)
 
 	return (dest);
 }
+
+/**
+*  _strcat - concatenates two strings.
+*  @dest: The destination string.
+*  @src: The source string.
+*
+* Return: A pointer to the destination string.
+*/

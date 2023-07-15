@@ -24,9 +24,9 @@ char *searchfile(dir_l *head, char *name)
 			perror("malloc");
 			exit(EXIT_FAILURE);
 		}
-		_memcpy(file, head->dir_name, dir_len);
-		_memcpy(file + dir_len, "/", 1);
-		_memcpy(file + dir_len + 1, name, name_len);
+		_strncpy(file, head->dir_name, dir_len);
+		_strcat(file + dir_len, "/");
+		_strcat(file + dir_len + 1, name);
 		file[file_len - 1] = '\0';
 		if (isProgramPath(file))
 			return (file);
@@ -63,9 +63,19 @@ char *search_prog(char *name)
 	char *env_path = _getenv(ENV_PATH);
 	char *prog_path = NULL;
 	dir_l *head = NULL;
+	char **args = malloc(sizeof(char *) * 2);
 
 	if (!name || !env_path)
 		return (NULL);
+
+	args[0] = name;
+	args[1] = NULL;
+
+	if (execute_builtin_command(args))
+	{
+		free(env_path);
+		return _strdup(name);
+	}
 	if (isProgramPath(name))
 	{
 		free(env_path);
@@ -73,6 +83,7 @@ char *search_prog(char *name)
 	}
 	build_env_dirs(&head, env_path);
 	prog_path = searchfile(head, name);
+
 	if (prog_path == NULL)
 	{
 		fprintf(stderr, "bash: %s: %s\n", name, strerror(errno));
@@ -80,6 +91,7 @@ char *search_prog(char *name)
 		free(env_path);
 		return (NULL);
 	}
+
 	free_dirl(&head);
 	free(env_path);
 	return (prog_path);

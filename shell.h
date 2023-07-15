@@ -30,6 +30,7 @@ typedef struct directory_list
 
 size_t _strlen(char *str);
 void prompt(void);
+char *_strcat(char *dest, char *src);
 void free_memory(char **buffer);
 void free_tokens(char **tokens);
 char *_strchr(char *s, char c);
@@ -47,7 +48,6 @@ int execute_external_command(char **args, char **env);
 int execute_command(char **args, char **env);
 char *_memcpy(char *dest, char *src, unsigned int n);
 int _strcmp(char *s1, char *s2);
-char *_strcat(char *dest, char *src);
 char *_strdup(char *src);
 char **tokenize(char *commands);
 int _strncmp(char *s1, char *s2, size_t n);
