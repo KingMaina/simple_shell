@@ -64,17 +64,17 @@ char *search_prog(char *name)
 	char *prog_path = NULL;
 	dir_l *head = NULL;
 	char **args = malloc(sizeof(char *) * 2);
+	char error_message[100];
 
 	if (!name || !env_path)
 		return (NULL);
-
 	args[0] = name;
 	args[1] = NULL;
 
 	if (execute_builtin_command(args))
 	{
 		free(env_path);
-		return _strdup(name);
+		return (_strdup(name));
 	}
 	if (isProgramPath(name))
 	{
@@ -83,15 +83,18 @@ char *search_prog(char *name)
 	}
 	build_env_dirs(&head, env_path);
 	prog_path = searchfile(head, name);
-
 	if (prog_path == NULL)
 	{
-		fprintf(stderr, "bash: %s: %s\n", name, strerror(errno));
+		_strncpy(error_message, "bash: ", sizeof(error_message));
+		_strcat(error_message, name);
+		_strcat(error_message, ": ");
+		_strcat(error_message, strerror(errno));
+		_strcat(error_message, "\n");
+		write(STDERR_FILENO, error_message, _strlen(error_message));
 		free_dirl(&head);
 		free(env_path);
 		return (NULL);
 	}
-
 	free_dirl(&head);
 	free(env_path);
 	return (prog_path);

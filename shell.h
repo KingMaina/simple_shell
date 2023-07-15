@@ -54,5 +54,6 @@ int _strncmp(char *s1, char *s2, size_t n);
 void free_args(char ***args);
 int isProgramPath(char *path);
 void update_cmd(char **args, int index, char *progPath);
+char *_strcpy(char *dest, const char *src);
 
 #endif /* __SHELL__H_ */

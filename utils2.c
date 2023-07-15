@@ -77,9 +77,24 @@ char *_strncpy(char *dest, char *src, int n)
 }
 
 /**
-*  _strcat - concatenates two strings.
-*  @dest: The destination string.
-*  @src: The source string.
-*
-* Return: A pointer to the destination string.
-*/
+ * _strcpy - Copies the source string to the destination buffer
+ * @dest: Destination buffer
+ * @src: Source string
+ *
+ * Return: Pointer to the destination buffer
+ */
+char *_strcpy(char *dest, const char *src)
+{
+	char *ptr = dest;
+
+	while (*src != '\0')
+	{
+		*ptr = *src;
+		ptr++;
+		src++;
+	}
+
+	*ptr = '\0';
+
+	return (dest);
+}

@@ -11,12 +11,12 @@
 int execute_builtin_command(char **args)
 {
 	char *cmd = args[0];
+	char error_message[100];
 
 	if (cmd == NULL)
 	{
 		return (0);
 	}
-
 	if (_strcmp(cmd, "exit") == 0)
 	{
 		exit(EXIT_SUCCESS);
@@ -26,14 +26,19 @@ int execute_builtin_command(char **args)
 	{
 		if (args[1] == NULL)
 		{
-			write(STDERR_FILENO, "cd: expected argument to \"cd\"\n"
-			      , 31);
+			return (1);
 		}
 		else
 		{
 			if (chdir(args[1]) != 0)
 			{
-				perror("cd");
+				_strcpy(error_message, "cd: ");
+				_strcat(error_message, args[1]);
+				_strcat(error_message, ": ");
+				_strcat(error_message, strerror(errno));
+				_strcat(error_message, "\n");
+				write(STDERR_FILENO, error_message,
+				      _strlen(error_message));
 			}
 		}
 		return (1);
