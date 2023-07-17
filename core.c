@@ -31,7 +31,6 @@ char *searchfile(dir_l *head, char *name)
 		if (isProgramPath(file))
 			return (file);
 		free(file);
-		file = NULL;
 		head = head->next;
 	}
 
@@ -74,18 +73,20 @@ char *search_prog(char *name)
 	if (execute_builtin_command(args))
 	{
 		free(env_path);
+		free(args);
 		return (_strdup(name));
 	}
 	if (isProgramPath(name))
 	{
 		free(env_path);
+		free(args);
 		return (_strdup(name));
 	}
 	build_env_dirs(&head, env_path);
 	prog_path = searchfile(head, name);
 	if (prog_path == NULL)
 	{
-		_strncpy(error_message, "bash: ", sizeof(error_message));
+		_strcpy(error_message, "bash: ");
 		_strcat(error_message, name);
 		_strcat(error_message, ": ");
 		_strcat(error_message, strerror(errno));
@@ -93,9 +94,11 @@ char *search_prog(char *name)
 		write(STDERR_FILENO, error_message, _strlen(error_message));
 		free_dirl(&head);
 		free(env_path);
+		free(args);
 		return (NULL);
 	}
 	free_dirl(&head);
 	free(env_path);
+	free(args);
 	return (prog_path);
 }

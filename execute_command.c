@@ -12,6 +12,7 @@ int execute_builtin_command(char **args)
 {
 	char *cmd = args[0];
 	char error_message[100];
+	char cwd[1024];
 
 	if (cmd == NULL)
 	{
@@ -22,24 +23,20 @@ int execute_builtin_command(char **args)
 		exit(EXIT_SUCCESS);
 	}
 
-	if (_strcmp(cmd, "cd") == 0)
+	if (_strcmp(cmd, "getcwd") == 0)
 	{
-		if (args[1] == NULL)
+		if (getcwd(cwd, sizeof(cwd)) != NULL)
 		{
-			return (1);
+			write(STDOUT_FILENO, cwd, _strlen(cwd));
+			write(STDOUT_FILENO, "\n", 1);
 		}
 		else
 		{
-			if (chdir(args[1]) != 0)
-			{
-				_strcpy(error_message, "cd: ");
-				_strcat(error_message, args[1]);
-				_strcat(error_message, ": ");
-				_strcat(error_message, strerror(errno));
-				_strcat(error_message, "\n");
-				write(STDERR_FILENO, error_message,
-				      _strlen(error_message));
-			}
+			_strcpy(error_message, "getcwd: ");
+			_strcat(error_message, strerror(errno));
+			_strcat(error_message, "\n");
+			write(STDERR_FILENO, error_message,
+			      _strlen(error_message));
 		}
 		return (1);
 	}
@@ -57,11 +54,11 @@ int execute_external_command(char **args, char **env)
 {
 	pid_t pid;
 	char *program_path = search_prog(args[0]);
+	char *msg = NULL;
 
 	if (program_path == NULL)
 	{
-		char *msg = _strcat(args[0], ": command not found\n");
-
+		msg = _strcat(args[0], ": command not found\n");
 		write(STDERR_FILENO, msg, _strlen(msg));
 		free(msg);
 		return (0);
