@@ -38,7 +38,12 @@ char **split_string(char *str, int *num_args)
 		tokens[token_position] = _strdup(token);
 
 		if (!tokens[token_position])
+		{
+			while (token_position > 0)
+				free(tokens[--token_position]);
+			free(tokens);
 			return (NULL);
+		}
 		token_position++;
 		token = strtok(NULL, DELIMS);
 	}

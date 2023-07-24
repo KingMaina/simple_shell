@@ -25,7 +25,6 @@ void process_command(char *command, char **env)
 
 	if (progPath == NULL)
 	{
-		free_args(&args);
 		return;
 	}
 	update_cmd(args, 0, progPath);

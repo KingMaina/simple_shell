@@ -97,6 +97,5 @@ char *search_prog(char *name)
 	}
 	free_dirl(&head);
 	free(env_path);
-	free_args(&args);
 	return (prog_path);
 }
