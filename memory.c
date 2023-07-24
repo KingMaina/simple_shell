@@ -84,3 +84,19 @@ void free_tokens(char **tokens)
 	}
 	free(tokens);
 }
+
+/**
+ * cleanup - Free the dynamically allocated memory for the command, arguments,
+ * and program path.
+ * @command: commands to be freed
+ * @progPath: path to free
+ * @args: ...
+ *
+ * Return: nothing
+ */
+void cleanup(char *command, char **args, char *progPath)
+{
+	free(command);
+	free_args(&args);
+	free(progPath);
+}

@@ -52,7 +52,6 @@ int execute_builtin_command(char **args)
  * @env: a pointer to an array of strings of environment variables
  * Return: pointer to path of executable file, NULL if not found
  */
-
 int execute_external_command(char **args, char **env)
 {
 	pid_t pid;
@@ -60,10 +59,15 @@ int execute_external_command(char **args, char **env)
 
 	if (program_path == NULL)
 	{
-		char *msg = _strcat(args[0], ": command not found\n");
+		char *msg = malloc(_strlen(args[0]) + 20);
 
-		write(STDERR_FILENO, msg, _strlen(msg));
-		free(msg);
+		if (msg)
+		{
+			_strcpy(msg, args[0]);
+			_strcat(msg, ": command not found\n");
+			write(STDERR_FILENO, msg, _strlen(msg));
+			free(msg);
+		}
 		return (0);
 	}
 
@@ -78,7 +82,8 @@ int execute_external_command(char **args, char **env)
 		if (execve(program_path, args, env) == -1)
 		{
 			perror(program_path);
-			return (0);
+			free(program_path);
+			exit(EXIT_FAILURE);
 		}
 	}
 	else

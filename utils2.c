@@ -8,7 +8,7 @@
 *
 * Return: 0 if the strings exaclty match upto the nth byte
 */
-int _strncmp(char *s1, char *s2, size_t n)
+int _strncmp(const char *s1, char *s2, size_t n)
 {
 	size_t i;
 
@@ -97,4 +97,28 @@ char *_strcpy(char *dest, const char *src)
 	*ptr = '\0';
 
 	return (dest);
+}
+
+/**
+ * _strcspn - searches for the first occurrence of any character
+ * @str: ...
+ * @reject: ...
+ *
+ * Return: returns the position (index) of the first occurrence
+ */
+size_t _strcspn(const char *str, const char *reject)
+{
+	size_t i, j;
+
+	for (i = 0; str[i] != '\0'; i++)
+	{
+		for (j = 0; reject[j] != '\0'; j++)
+		{
+			if (str[i] == reject[j])
+			{
+				return i;
+			}
+		}
+	}
+	return (i);
 }

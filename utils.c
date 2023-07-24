@@ -6,12 +6,18 @@
 *
 * Return: Number of bytes counted
 */
-size_t _strlen(char *str)
+size_t _strlen(const char *str)
 {
 	size_t len = 0;
 
-	while (*str++ != '\0')
+	if (str == NULL)
+		return (0);
+
+	while (*str != '\0')
+	{
 		len++;
+		str++;
+	}
 
 	return (len);
 }
@@ -89,8 +95,15 @@ char *_strdup(char *src)
 	size_t len = _strlen(src) + 1;
 	char *dest = malloc(sizeof(*dest) * len);
 
-	if (dest)
-		_memcpy(dest, src, len);
+	if(src == NULL)
+		return (NULL);
 
-	return (dest);
+	if (dest)
+	{
+		_memcpy(dest, src, len);
+		return (dest);
+	}
+
+	free(dest);
+	return (NULL);
 }

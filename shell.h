@@ -28,7 +28,7 @@ typedef struct directory_list
 	struct directory_list *next;
 } dir_l;
 
-size_t _strlen(char *str);
+size_t _strlen(const char *str);
 void prompt(void);
 char *_strcat(char *dest, char *src);
 void free_memory(char **buffer);
@@ -50,10 +50,17 @@ char *_memcpy(char *dest, char *src, unsigned int n);
 int _strcmp(char *s1, char *s2);
 char *_strdup(char *src);
 char **tokenize(char *commands);
-int _strncmp(char *s1, char *s2, size_t n);
+int _strncmp(const char *s1, char *s2, size_t n);
 void free_args(char ***args);
 int isProgramPath(char *path);
 void update_cmd(char **args, int index, char *progPath);
 char *_strcpy(char *dest, const char *src);
+size_t _strcspn(const char *str, const char *reject);
+void exitShell(void);
+int handleCommand(const char *command);
+void shell_loop(char **env, char *argv[]);
+void process_command(char *command, char **env);
+char *read_command(void);
+void cleanup(char *command, char **args, char *progPath);
 
 #endif /* __SHELL__H_ */
