@@ -24,9 +24,9 @@ char *searchfile(dir_l *head, char *name)
 			perror("malloc");
 			exit(EXIT_FAILURE);
 		}
-		_strncpy(file, head->dir_name, dir_len);
-		_strcat(file + dir_len, "/");
-		_strcat(file + dir_len + 1, name);
+		_memcpy(file, head->dir_name, dir_len);
+		_memcpy(file + dir_len, "/", 1);
+		_memcpy(file + dir_len + 1, name, name_len + 1);
 		file[file_len - 1] = '\0';
 		if (isProgramPath(file))
 			return (file);
