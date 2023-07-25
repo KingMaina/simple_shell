@@ -116,7 +116,7 @@ size_t _strcspn(const char *str, const char *reject)
 		{
 			if (str[i] == reject[j])
 			{
-				return i;
+				return (i);
 			}
 		}
 	}

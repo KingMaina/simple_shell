@@ -14,32 +14,35 @@ int execute_builtin_command(char **args)
 	char error_message[100];
 
 	if (cmd == NULL)
-	{
 		return (0);
-	}
 	if (_strcmp(cmd, "exit") == 0)
-	{
 		exit(EXIT_SUCCESS);
-	}
-
 	if (_strcmp(cmd, "cd") == 0)
 	{
 		if (args[1] == NULL)
-		{
 			return (1);
-		}
-		else
+		else if (chdir(args[1]) != 0)
 		{
-			if (chdir(args[1]) != 0)
-			{
-				_strcpy(error_message, "cd: ");
-				_strcat(error_message, args[1]);
-				_strcat(error_message, ": ");
-				_strcat(error_message, strerror(errno));
-				_strcat(error_message, "\n");
-				write(STDERR_FILENO, error_message,
-				      _strlen(error_message));
-			}
+			_strcpy(error_message, "cd: ");
+			_strcat(error_message, args[1]);
+			_strcat(error_message, ": ");
+			_strcat(error_message, strerror(errno));
+			_strcat(error_message, "\n");
+			write(STDERR_FILENO, error_message,
+			_strlen(error_message));
+		}
+		return (1);
+	}
+
+	if (_strcmp(cmd, "env") == 0)
+	{
+		int i = 0;
+
+		while (environ[i])
+		{
+			write(STDOUT_FILENO, environ[i], _strlen(environ[i]));
+			write(STDOUT_FILENO, "\n", 1);
+			i++;
 		}
 		return (1);
 	}

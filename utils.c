@@ -95,7 +95,7 @@ char *_strdup(char *src)
 	size_t len = _strlen(src) + 1;
 	char *dest = malloc(sizeof(*dest) * len);
 
-	if(src == NULL)
+	if (src == NULL)
 		return (NULL);
 
 	if (dest)
