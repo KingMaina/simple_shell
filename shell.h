@@ -9,10 +9,12 @@
 #include <dirent.h>
 #include <errno.h>
 #include <sys/wait.h>
+#include <signal.h>
 
 #define BUFF_SIZE 1024
 #define DELIM_DIRS ":"
 #define ENV_PATH "PATH"
+#define UN_ATTR __attribute__((unused))
 
 extern char **environ;
 
@@ -43,7 +45,7 @@ dir_l *add_node_begin(dir_l **head, char *str);
 dir_l *build_env_dirs(dir_l **head, char *str);
 void free_dirl(dir_l **head);
 char *searchfile(dir_l *head, char *name);
-char *search_prog(char *name);
+char *search_prog(char *name, char **argv);
 void upd_cmd(char ***args, char *str, int ntoks, size_t str_len, char *name);
 int execute_builtin_command(char **args);
 int execute_external_command(char **args, char **env);
@@ -61,9 +63,11 @@ size_t _strcspn(const char *str, const char *reject);
 void exitShell(char **arg);
 void free_args2(char **arg);
 void shell_loop(char **env, char *argv[]);
-void process_command(char *command, char **env);
+void process_command(char *command, char **argv, char **env);
 char *read_command(void);
 void cleanup(char *command, char **args, char *progPath);
 int _atoi(const char *str);
+void handle_sigint(int sig);
+void showError(char *program, char *command);
 
-#endif /* __SHELL__H_ */
+#endif /* #ifndef __SHELL__H_ */

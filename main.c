@@ -25,27 +25,30 @@ int get_last_exit_status(void)
 /**
  * process_command - handles the prcoessing of each command
  * @command: comands from user
+ * @argv: NULL terminated list of the application arguments
  * @env: NULL terminated list of the process' environment variables
  *
  * Return: none
  */
-void process_command(char *command, char **env)
+void process_command(char *command, char **argv, char **env)
 {
 	int num_args;
-	char **args;
-	char *progPath;
+	char **args = NULL;
+	char *progPath = NULL;
 
-	if (command == NULL || command[0] == '\n')
+	if (!command || command[0] == '\0')
 	{
 		free(command);
 		return;
 	}
 	num_args = 0;
 	args = split_string(command, &num_args);
-	progPath = search_prog(args[0]);
+	progPath = search_prog(args[0], argv);
 
 	if (progPath == NULL)
 	{
+		free(command);
+		free_tokens(args);
 		return;
 	}
 	update_cmd(args, 0, progPath);
@@ -72,9 +75,16 @@ void shell_loop(char **env, char *argv[])
 
 	while (1 && argv[0])
 	{
+		signal(SIGINT, handle_sigint);
 		prompt();
 		command = read_command();
-		process_command(command, env);
+		if (command == NULL)
+		{
+			if (isatty(STDIN_FILENO))
+				write(STDOUT_FILENO, "\n", 1);
+			break;
+		}
+		process_command(command, argv, env);
 	}
 }
 
@@ -86,7 +96,7 @@ void shell_loop(char **env, char *argv[])
 *
 * Return: 0 if successful, non-zero if error
 */
-int main(__attribute__((unused)) int argc, char **argv, char **env)
+int main(UN_ATTR int argc, char **argv, char **env)
 {
 	last_exit_status = 0;
 	shell_loop(env, argv);

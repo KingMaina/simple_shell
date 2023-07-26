@@ -59,21 +59,6 @@ int execute_external_command(char **args, char **env)
 {
 	pid_t pid;
 	int status;
-	char *program_path = search_prog(args[0]);
-
-	if (program_path == NULL)
-	{
-		char *msg = malloc(_strlen(args[0]) + 20);
-
-		if (msg)
-		{
-			_strcpy(msg, args[0]);
-			_strcat(msg, ": command not found\n");
-			write(STDERR_FILENO, msg, _strlen(msg));
-			free(msg);
-		}
-		return (0);
-	}
 
 	pid = fork();
 	if (pid == -1)
@@ -83,10 +68,9 @@ int execute_external_command(char **args, char **env)
 	}
 	if (pid == 0)
 	{
-		if (execve(program_path, args, env) == -1)
+		if (execve(args[0], args, env) == -1)
 		{
-			perror(program_path);
-			free(program_path);
+			perror("execve");
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -95,7 +79,6 @@ int execute_external_command(char **args, char **env)
 		waitpid(pid, &status, 0);
 		set_last_exit_status(status);
 	}
-	free(program_path);
 	return (1);
 }
 
