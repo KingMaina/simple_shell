@@ -30,6 +30,7 @@ typedef struct directory_list
 	struct directory_list *next;
 } dir_l;
 
+
 void set_last_exit_status(int status);
 int get_last_exit_status(void);
 size_t _strlen(const char *str);
@@ -47,7 +48,8 @@ void free_dirl(dir_l **head);
 char *searchfile(dir_l *head, char *name);
 char *search_prog(char *command, char **tokens, char **argv);
 void upd_cmd(char ***args, char *str, int ntoks, size_t str_len, char *name);
-int execute_builtin_command(char *command, char **args, char *env_path);
+int execute_builtin_command(char *command, char **args,
+char *env_path, char **argv);
 int execute_external_command(char **args, char **env);
 int execute_command(char **args, char **env);
 char *_memcpy(char *dest, char *src, unsigned int n);
@@ -69,7 +71,7 @@ void cleanup(char *command, char **args, char *progPath);
 int _atoi(const char *str);
 void handle_sigint(int sig);
 void showError(char *program, char *command);
-void handle_exit(char **args);
+void handle_exit(char **args, char **argv);
 void handle_env(void);
 
 #endif /* #ifndef __SHELL__H_ */

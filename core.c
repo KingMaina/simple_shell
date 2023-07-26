@@ -68,7 +68,7 @@ char *search_prog(char *command, char **tokens, char *argv[])
 
 	if (!tokens || !env_path)
 		return (NULL);
-	if (execute_builtin_command(command, tokens, env_path))
+	if (execute_builtin_command(command, tokens, env_path, argv))
 	{
 		return (NULL);
 	}

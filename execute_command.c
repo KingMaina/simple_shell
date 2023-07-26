@@ -6,11 +6,13 @@
  * @command: command given by user
  * @args: null-terminate array of strings containing command and its arguments
  * @env_path: pointer to the path of the environment
+ * @argv: NULL terminated list of the shell's arguments
  *
  * Return: 1 success, 0 otherwise
  */
 
-int execute_builtin_command(char *command, char **args, char *env_path)
+int execute_builtin_command(char *command,
+char **args, char *env_path, char **argv)
 {
 	char *cmd = args[0];
 	char error_message[100];
@@ -21,7 +23,7 @@ int execute_builtin_command(char *command, char **args, char *env_path)
 	{
 		free(env_path);
 		free(command);
-		handle_exit(args);
+		handle_exit(args, argv);
 		return (1);
 	}
 	if (_strcmp(cmd, "cd") == 0)
@@ -42,6 +44,7 @@ int execute_builtin_command(char *command, char **args, char *env_path)
 	}
 	if (_strcmp(cmd, "env") == 0)
 	{
+		free(env_path);
 		handle_env();
 		return (1);
 	}
