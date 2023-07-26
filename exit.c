@@ -4,90 +4,56 @@
 #define EXIT_COMMAND 1
 /**
  * exitShell - exit built-in, that exits the shell
+ * @arg: array of words of the entered shell
  *
  * Return: nothing
  */
 
-void exitShell(void)
+void exitShell(char **arg)
 {
 	char command[100];
+	int i = 1;
+	int exit_code = 0;
 	char exitMessage[] = "exit\n\n[Disconnected...]\n";
 
 	read(STDIN_FILENO, command, sizeof(command));
-	command[strcspn(command, "\n")] = '\0';
+	command[_strcspn(command, "\n")] = '\0';
 
-	if (strcmp(command, "exit") == 0)
+	if (_strcmp(command, "exit") == 0)
 	{
+		if (arg[i])
+		{
+			exit_code = _atoi(arg[i]);
+			if (exit_code <= -1)
+				exit_code = 2;
+		}
+		free_args2(arg);
 		write(STDOUT_FILENO, exitMessage, sizeof(exitMessage) - 1);
-		_exit(EXIT_SUCCESS);
-	}
-	else
-	{
-		handleCommand(command);
+		exit(get_last_exit_status());
 	}
 }
 
 /**
- * custom_error - a function that handles errors
- * @arg: ...
- * @message: ...
+ * free_args2 - De-allocates memory from an array of strings
+ * allocated dynamically
+ * @arg: the address of a pointer to an array of strings
  *
- * Return: nothing
- */
-void custom_error(const char *arg, const char *message)
-{
-	write(STDOUT_FILENO, "bash: exit: ", sizeof("bash: exit: ") - 1);
-	write(STDOUT_FILENO, arg, strlen(arg));
-	write(STDOUT_FILENO, ": ", sizeof(": ") - 1);
-	write(STDOUT_FILENO, message, strlen(message));
-	write(STDOUT_FILENO, "\n", 1);
-}
-
-/**
- * handleCommand - Handles custom commands in the shell
- * @command: The command to be handled
+ * Description: This function de-allocates memory from the array of strings
+ * and sets the `arg` pointer to NULL.
  *
- * Return: None
+ * Return: void
  */
-
-int handleCommand(const char *command)
+void free_args2(char **arg)
 {
-	int exit_code;
-	const char *arg;
-	size_t i;
+	int i;
 
-	if (_strncmp(command, "exit", 4) == 0)
-	{
-		arg = command + 4;
-		while (*arg && (*arg == ' ' || *arg == '\t'))
-		{
-			arg++;
-		}
-		if (*arg)
-		{
-			for (i = 0; arg[i] != '\0'; i++)
-			{
-				if (arg[i] < '0' || arg[i] > '9')
-				{
-					custom_error(arg, "numeric argument required");
-					return (CONTINUE_COMMAND);
-				}
-			}
-			exit_code = atoi(arg);
-			if (exit_code >= 0 && exit_code <= 255)
-			{
-				return (EXIT_COMMAND);
-			}
-			else
-			{
-				custom_error(arg, "status out of range: 0-255");
-				return (CONTINUE_COMMAND);
-			}
-		}
-		else
-		{
-			return (EXIT_COMMAND);
-		}
-	}
-	return (CONTINUE_COMMAND);
+	if (arg == NULL)
+		return;
+
+	i = 0;
+	while (arg[i] != NULL)
+		free(arg[i++]);
+
+	free(arg);
+	*arg = NULL;
 }

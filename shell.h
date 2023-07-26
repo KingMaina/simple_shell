@@ -28,6 +28,8 @@ typedef struct directory_list
 	struct directory_list *next;
 } dir_l;
 
+void set_last_exit_status(int status);
+int get_last_exit_status(void);
 size_t _strlen(const char *str);
 void prompt(void);
 char *_strcat(char *dest, char *src);
@@ -56,11 +58,12 @@ int isProgramPath(char *path);
 void update_cmd(char **args, int index, char *progPath);
 char *_strcpy(char *dest, const char *src);
 size_t _strcspn(const char *str, const char *reject);
-void exitShell(void);
-int handleCommand(const char *command);
+void exitShell(char **arg);
+void free_args2(char **arg);
 void shell_loop(char **env, char *argv[]);
 void process_command(char *command, char **env);
 char *read_command(void);
 void cleanup(char *command, char **args, char *progPath);
+int _atoi(const char *str);
 
 #endif /* __SHELL__H_ */
