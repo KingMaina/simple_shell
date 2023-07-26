@@ -3,12 +3,14 @@
 /**
  * execute_builtin_command - searches if the given command by
  * user is in-built
+ * @command: command given by user
  * @args: null-terminate array of strings containing command and its arguments
+ * @env_path: pointer to the path of the environment
  *
  * Return: 1 success, 0 otherwise
  */
 
-int execute_builtin_command(char **args)
+int execute_builtin_command(char *command, char **args, char *env_path)
 {
 	char *cmd = args[0];
 	char error_message[100];
@@ -16,7 +18,12 @@ int execute_builtin_command(char **args)
 	if (cmd == NULL)
 		return (0);
 	if (_strcmp(cmd, "exit") == 0)
-		exit(EXIT_SUCCESS);
+	{
+		free(env_path);
+		free(command);
+		handle_exit(args);
+		return (1);
+	}
 	if (_strcmp(cmd, "cd") == 0)
 	{
 		if (args[1] == NULL)
@@ -33,17 +40,9 @@ int execute_builtin_command(char **args)
 		}
 		return (1);
 	}
-
 	if (_strcmp(cmd, "env") == 0)
 	{
-		int i = 0;
-
-		while (environ[i])
-		{
-			write(STDOUT_FILENO, environ[i], _strlen(environ[i]));
-			write(STDOUT_FILENO, "\n", 1);
-			i++;
-		}
+		handle_env();
 		return (1);
 	}
 	return (0);
@@ -91,14 +90,7 @@ int execute_external_command(char **args, char **env)
 
 int execute_command(char **args, char **env)
 {
-	if (execute_builtin_command(args))
-	{
-		return (1);
-	}
-
 	if (execute_external_command(args, env))
-	{
 		return (1);
-	}
 	return (0);
 }

@@ -54,40 +54,34 @@ int isProgramPath(char *path)
 
 /**
 * search_prog - Looks for a program in the process environment
-* @name: Name of the program
-* @argv: NULL terminated list of the application arguments
+* @command: The user command input
+* @tokens: The user command input tokens
+* @argv: NULL terminated list of the shell's arguments
 *
 * Return: Pointer to the updated program name token
 */
-char *search_prog(char *name, char *argv[])
+char *search_prog(char *command, char **tokens, char *argv[])
 {
 	char *env_path = _getenv(ENV_PATH);
 	char *prog_path = NULL;
 	dir_l *head = NULL;
-	char **args = malloc(sizeof(char *) * 2);
 
-	if (!name || !env_path)
+	if (!tokens || !env_path)
 		return (NULL);
-	args[0] = name;
-	args[1] = NULL;
-
-	if (execute_builtin_command(args))
+	if (execute_builtin_command(command, tokens, env_path))
 	{
-		free(env_path);
-		free(args);
 		return (NULL);
 	}
-	free(args);
-	if (isProgramPath(name))
+	if (isProgramPath(tokens[0]))
 	{
 		free(env_path);
-		return (_strdup(name));
+		return (_strdup(tokens[0]));
 	}
 	build_env_dirs(&head, env_path);
-	prog_path = searchfile(head, name);
+	prog_path = searchfile(head, tokens[0]);
 	if (prog_path == NULL)
 	{
-		showError(argv[0], name);
+		showError(argv[0], tokens[0]);
 		free_dirl(&head);
 		free(env_path);
 		return (NULL);

@@ -43,7 +43,7 @@ void process_command(char *command, char **argv, char **env)
 	}
 	num_args = 0;
 	args = split_string(command, &num_args);
-	progPath = search_prog(args[0], argv);
+	progPath = search_prog(command, args, argv);
 
 	if (progPath == NULL)
 	{

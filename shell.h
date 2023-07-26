@@ -45,9 +45,9 @@ dir_l *add_node_begin(dir_l **head, char *str);
 dir_l *build_env_dirs(dir_l **head, char *str);
 void free_dirl(dir_l **head);
 char *searchfile(dir_l *head, char *name);
-char *search_prog(char *name, char **argv);
+char *search_prog(char *command, char **tokens, char **argv);
 void upd_cmd(char ***args, char *str, int ntoks, size_t str_len, char *name);
-int execute_builtin_command(char **args);
+int execute_builtin_command(char *command, char **args, char *env_path);
 int execute_external_command(char **args, char **env);
 int execute_command(char **args, char **env);
 char *_memcpy(char *dest, char *src, unsigned int n);
@@ -69,5 +69,7 @@ void cleanup(char *command, char **args, char *progPath);
 int _atoi(const char *str);
 void handle_sigint(int sig);
 void showError(char *program, char *command);
+void handle_exit(char **args);
+void handle_env(void);
 
 #endif /* #ifndef __SHELL__H_ */
