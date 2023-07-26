@@ -96,8 +96,9 @@ void shell_loop(char **env, char *argv[])
 *
 * Return: 0 if successful, non-zero if error
 */
-int main(UN_ATTR int argc, char **argv, char **env)
+int main(int argc, char **argv, char **env)
 {
+	(void)argc;
 	last_exit_status = 0;
 	shell_loop(env, argv);
 
