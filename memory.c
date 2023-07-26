@@ -94,9 +94,14 @@ void free_tokens(char **tokens)
  *
  * Return: nothing
  */
-void cleanup(char *command, char **args, char *progPath)
+void cleanup(UN_ATTR char *command,
+UN_ATTR char **args,
+UN_ATTR char *progPath)
 {
-	free(command);
-	free_args(&args);
-	free(progPath);
+	if (command)
+		free(command);
+	if (args)
+		free_args(&args);
+	if (progPath)
+		free(progPath);
 }

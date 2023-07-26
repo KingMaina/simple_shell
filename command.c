@@ -9,8 +9,10 @@ void prompt(void)
 {
 	int prompt_len = 2;
 
-	write(STDOUT_FILENO, "$ ", prompt_len);
-	fflush(stdout);
+	if (isatty(STDIN_FILENO))
+	{
+		write(STDOUT_FILENO, "$ ", prompt_len);
+	}
 }
 
 
@@ -41,11 +43,9 @@ char *read_command(void)
 	size_t command_len = 0;
 	ssize_t bytesRead = -1;
 
-	while (1)
-	{
 		bytesRead = getline(&command, &command_len, stdin);
 
-		if (bytesRead == -1)
+		if (bytesRead == EOF)
 		{
 			free(command);
 			return (NULL);
@@ -55,7 +55,5 @@ char *read_command(void)
 
 		fflush(stdin);
 
-		break;
-	}
 	return (command);
 }

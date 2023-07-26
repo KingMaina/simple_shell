@@ -55,16 +55,16 @@ int isProgramPath(char *path)
 /**
 * search_prog - Looks for a program in the process environment
 * @name: Name of the program
+* @argv: NULL terminated list of the application arguments
 *
 * Return: Pointer to the updated program name token
 */
-char *search_prog(char *name)
+char *search_prog(char *name, char *argv[])
 {
 	char *env_path = _getenv(ENV_PATH);
 	char *prog_path = NULL;
 	dir_l *head = NULL;
 	char **args = malloc(sizeof(char *) * 2);
-	char error_message[100];
 
 	if (!name || !env_path)
 		return (NULL);
@@ -74,8 +74,10 @@ char *search_prog(char *name)
 	if (execute_builtin_command(args))
 	{
 		free(env_path);
-		return (_strdup(name));
+		free(args);
+		return (NULL);
 	}
+	free(args);
 	if (isProgramPath(name))
 	{
 		free(env_path);
@@ -85,12 +87,7 @@ char *search_prog(char *name)
 	prog_path = searchfile(head, name);
 	if (prog_path == NULL)
 	{
-		_strncpy(error_message, "bash: ", sizeof(error_message));
-		_strcat(error_message, name);
-		_strcat(error_message, ": ");
-		_strcat(error_message, strerror(errno));
-		_strcat(error_message, "\n");
-		write(STDERR_FILENO, error_message, _strlen(error_message));
+		showError(argv[0], name);
 		free_dirl(&head);
 		free(env_path);
 		return (NULL);
