@@ -58,6 +58,7 @@ int execute_builtin_command(char **args)
 int execute_external_command(char **args, char **env)
 {
 	pid_t pid;
+	int status;
 
 	pid = fork();
 	if (pid == -1)
@@ -75,9 +76,8 @@ int execute_external_command(char **args, char **env)
 	}
 	else
 	{
-		int status;
-
 		waitpid(pid, &status, 0);
+		set_last_exit_status(status);
 	}
 	return (1);
 }

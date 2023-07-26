@@ -1,6 +1,27 @@
 #include "shell.h"
 
+static int last_exit_status;
 
+/**
+ * set_last_exit_status - Function to set the last exit status
+ * @status: status
+ *
+ * Return: ...
+ */
+void set_last_exit_status(int status)
+{
+	last_exit_status = WIFEXITED(status) ? WEXITSTATUS(status) : 1;
+}
+
+/**
+ * get_last_exit_status - Function to get the last exit status
+ *
+ * Return: last exit status
+ */
+int get_last_exit_status(void)
+{
+	return (last_exit_status);
+}
 /**
  * process_command - handles the prcoessing of each command
  * @command: comands from user
@@ -36,7 +57,7 @@ void process_command(char *command, char **argv, char **env)
 	if (_strcmp(args[0], "exit") == 0)
 	{
 		cleanup(command, args, progPath);
-		exitShell();
+		exitShell(args);
 	}
 	cleanup(command, args, progPath);
 }
@@ -77,6 +98,7 @@ void shell_loop(char **env, char *argv[])
 */
 int main(UN_ATTR int argc, char **argv, char **env)
 {
+	last_exit_status = 0;
 	shell_loop(env, argv);
 
 	return (EXIT_SUCCESS);
