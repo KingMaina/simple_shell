@@ -15,7 +15,6 @@ int execute_builtin_command(char *command,
 char **args, char *env_path, char **argv)
 {
 	char *cmd = args[0];
-	char error_message[100];
 
 	if (cmd == NULL)
 		return (0);
@@ -28,18 +27,7 @@ char **args, char *env_path, char **argv)
 	}
 	if (_strcmp(cmd, "cd") == 0)
 	{
-		if (args[1] == NULL)
-			return (1);
-		else if (chdir(args[1]) != 0)
-		{
-			_strcpy(error_message, "cd: ");
-			_strcat(error_message, args[1]);
-			_strcat(error_message, ": ");
-			_strcat(error_message, strerror(errno));
-			_strcat(error_message, "\n");
-			write(STDERR_FILENO, error_message,
-			_strlen(error_message));
-		}
+		handle_cd(args);
 		return (1);
 	}
 	if (_strcmp(cmd, "env") == 0)

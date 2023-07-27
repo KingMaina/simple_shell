@@ -30,7 +30,7 @@ size_t _strlen(const char *str)
 *
 * Return: A pointer to the destination string.
 */
-char *_memcpy(char *dest, char *src, unsigned int n)
+char *_memcpy(char *dest, const char *src, unsigned int n)
 {
 	unsigned int i;
 
@@ -50,7 +50,7 @@ char *_memcpy(char *dest, char *src, unsigned int n)
 * Return: 0 if the strings are equal, otherwise the lexical (alphabetical)
 * difference in the order of the strings.
 */
-int _strcmp(char *s1, char *s2)
+int _strcmp(const char *s1, const char *s2)
 {
 	while (*s1)
 	{
@@ -90,7 +90,7 @@ char *_strcat(char *dest, char *src)
 *
 * Return: The duplicated string, NULL otherwise
 */
-char *_strdup(char *src)
+char *_strdup(const char *src)
 {
 	size_t len = _strlen(src) + 1;
 	char *dest = malloc(sizeof(*dest) * len);

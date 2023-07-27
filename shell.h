@@ -39,7 +39,7 @@ char *_strcat(char *dest, char *src);
 void free_memory(char **buffer);
 void free_tokens(char **tokens);
 char *_strchr(char *s, char c);
-char *_strncpy(char *dest, char *src, int n);
+char *_strncpy(char *dest, const char *src, int n);
 char **split_string(char *str, int *num_ags);
 char *_getenv(char *name);
 dir_l *add_node_begin(dir_l **head, char *str);
@@ -52,11 +52,11 @@ int execute_builtin_command(char *command, char **args,
 char *env_path, char **argv);
 int execute_external_command(char **args, char **env);
 int execute_command(char **args, char **env);
-char *_memcpy(char *dest, char *src, unsigned int n);
-int _strcmp(char *s1, char *s2);
-char *_strdup(char *src);
+char *_memcpy(char *dest, const char *src, unsigned int n);
+int _strcmp(const char *s1, const char *s2);
+char *_strdup(const char *src);
 char **tokenize(char *commands);
-int _strncmp(const char *s1, char *s2, size_t n);
+int _strncmp(const char *s1, const char *s2, size_t n);
 void free_args(char ***args);
 int isProgramPath(char *path);
 void update_cmd(char **args, int index, char *progPath);
@@ -73,5 +73,8 @@ void handle_sigint(int sig);
 void showError(char *program, char *command);
 void handle_exit(char **args, char **argv);
 void handle_env(void);
+int handle_cd(char **args);
+int _setenv(const char *name, const char *value);
+int _unsetenv(const char *name);
 
 #endif /* #ifndef __SHELL__H_ */

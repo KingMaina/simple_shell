@@ -8,7 +8,7 @@
 *
 * Return: 0 if the strings exaclty match upto the nth byte
 */
-int _strncmp(const char *s1, char *s2, size_t n)
+int _strncmp(const char *s1, const char *s2, size_t n)
 {
 	size_t i;
 
@@ -60,7 +60,7 @@ char *_strchr(char *s, char c)
  * Return: pointer to destinatiom
  */
 
-char *_strncpy(char *dest, char *src, int n)
+char *_strncpy(char *dest, const char *src, int n)
 {
 	int i;
 

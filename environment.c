@@ -86,3 +86,77 @@ dir_l *build_env_dirs(dir_l **head, char *str)
 	}
 	return (*head);
 }
+
+/**
+ * _setenv - Sets the value of an environment variable
+ * @name: The name of the environment variable
+ * @value: The value to set for the environment variable
+ *
+ * Return: 0 on success, -1 on failure
+ */
+int _setenv(const char *name, const char *value)
+{
+	char *env_str = NULL;
+	int i, name_len = _strlen(name);
+	int value_len = _strlen(value);
+
+	if (!name || !value)
+		return (-1);
+
+	for (i = 0; environ[i]; i++)
+	{
+		if (_strncmp(environ[i], name, name_len) == 0)
+		{
+			env_str = malloc(name_len + value_len + 2);
+			if (!env_str)
+				return (-1);
+
+			_strncpy(env_str, name, name_len);
+			env_str[name_len] = '=';
+			_strcpy(env_str + name_len + 1, value);
+
+			free(environ[i]);
+			environ[i] = env_str;
+			return (0);
+		}
+	}
+	env_str = malloc(name_len + value_len + 2);
+	if (!env_str)
+		return (-1);
+
+	_strncpy(env_str, name, name_len);
+	env_str[name_len] = '=';
+	_strcpy(env_str + name_len + 1, value);
+
+	for (i = 0; environ[i]; i++)
+		;
+	environ[i] = env_str;
+	environ[i + 1] = NULL;
+	return (0);
+}
+
+/**
+ * _unsetenv - Unsets an environment variable
+ * @name: The name of the environment variable to unset
+ *
+ * Return: 0 on success, -1 on failure
+ */
+int _unsetenv(const char *name)
+{
+	int i, j, name_len = _strlen(name);
+
+	if (!name)
+		return (-1);
+
+	for (i = 0; environ[i]; i++)
+	{
+		if (_strncmp(environ[i], name, name_len) == 0 && environ[i][name_len] == '=')
+		{
+			for (j = i; environ[j]; j++)
+				environ[j] = environ[j + 1];
+
+			return (0);
+		}
+	}
+	return (-1);
+}
