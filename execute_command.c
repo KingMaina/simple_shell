@@ -29,7 +29,7 @@ char **args, char *env_path, char **argv)
 	{
 		free(env_path);
 		handle_cd(args);
-		return(1);
+		return (1);
 	}
 	if (_strcmp(cmd, "env") == 0)
 	{

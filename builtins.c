@@ -61,19 +61,29 @@ void handle_env(void)
  */
 int change_directory(char *dir)
 {
-	int chdir_ret = chdir(dir);
+	int chdir_ret = 0;
+	char *oldpwd = NULL;
+	char *pwd = NULL;
 
+	oldpwd = getcwd(NULL, 0);
+	chdir_ret = chdir(dir);
 	if (chdir_ret == -1)
 	{
 		write(STDERR_FILENO, "cd: ", 4);
 		write(STDERR_FILENO, dir, strlen(dir));
 		write(STDERR_FILENO, ": No such file or directory\n", 28);
+		free(dir);
+		free(oldpwd);
 		return (-1);
 	}
 	else
 	{
-		setenv("OLDPWD", getcwd(NULL, 0), 1);
-		setenv("PWD", getcwd(NULL, 0), 1);
+		setenv("OLDPWD", oldpwd, 1);
+		pwd = getcwd(NULL, 0);
+		setenv("PWD", pwd, 1);
+		free(oldpwd);
+		free(pwd);
+		free(dir);
 	}
 	return (0);
 }
@@ -135,6 +145,6 @@ int handle_cd(char **args)
 	}
 	else
 	{
-		return (change_directory(args[1]));
+		return (change_directory(_strdup(args[1])));
 	}
 }
