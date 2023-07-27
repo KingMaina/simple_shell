@@ -73,5 +73,8 @@ void handle_sigint(int sig);
 void showError(char *program, char *command);
 void handle_exit(char **args, char **argv);
 void handle_env(void);
+int handle_cd(char **args);
+int change_directory(char *dir);
+int handle_cd_minus(void);
 
 #endif /* #ifndef __SHELL__H_ */
