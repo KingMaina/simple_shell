@@ -14,23 +14,23 @@ void handle_exit(char **args, char **argv)
 	if (args[1])
 	{
 		exit_code = _atoi(args[1]);
-		if (exit_code < 0)
+		if (exit_code < 0 && args[1][0] != '0')
 		{
 			exit_code = 2;
-			write(STDOUT_FILENO, argv[0], _strlen(argv[0]));
-			write(STDOUT_FILENO, ": 1: ", 5);
-			write(STDOUT_FILENO, args[0], _strlen(args[0]));
-			write(STDOUT_FILENO, ": ", 2);
+			write(STDERR_FILENO, argv[0], _strlen(argv[0]));
+			write(STDERR_FILENO, ": 1: ", 5);
+			write(STDERR_FILENO, args[0], _strlen(args[0]));
+			write(STDERR_FILENO, ": ", 2);
 			write(STDERR_FILENO, "Illegal number: ", 16);
 			write(STDERR_FILENO, args[1], _strlen(args[1]));
-			write(STDOUT_FILENO, "\n", 1);
+			write(STDERR_FILENO, "\n", 1);
 		}
 		else if (exit_code > 255)
 			exit_code = 232;
 	}
 	else
 	{
-		exit_code = 1;
+		exit_code = 2;
 	}
 	free_tokens(args);
 	exit(exit_code);
