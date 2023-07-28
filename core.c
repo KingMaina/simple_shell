@@ -14,6 +14,8 @@ char *searchfile(dir_l *head, char *name)
 	int name_len = _strlen(name);
 	int file_len = 0, dir_len = 0;
 
+	if (head == NULL || name == NULL)
+		return (NULL);
 	while (head != NULL)
 	{
 		dir_len = _strlen(head->dir_name);
@@ -47,7 +49,7 @@ char *searchfile(dir_l *head, char *name)
 */
 int isProgramPath(char *path)
 {
-	if (access(path, X_OK) == 0)
+	if (path && (access(path, X_OK) == 0))
 		return (1);
 	return (0);
 }
